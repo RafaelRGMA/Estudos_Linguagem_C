@@ -4,7 +4,7 @@
 #include <string.h>
 #include <time.h>
 
-//Oi! Adorei esse jogo! Beijos da sua Veroniquinha :)
+
 
 //========== Área de prototipagem ==============
 void configuracaoInicial();
