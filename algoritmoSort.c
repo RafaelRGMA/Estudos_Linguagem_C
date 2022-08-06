@@ -13,6 +13,7 @@ typedef struct{
 //=======Prototipagem de funções===========
 Carro * menorEmaior(Carro * frota, int tamanhomax);
 Carro * ordenar(Carro * frota, int tamanhomax);
+Carro * ordenarInsercao (Carro * frota, int tamanhomax);
 //=========================================
 
 //=======Variáveis globais=================
@@ -26,7 +27,7 @@ Carro * selecionados;
 int main(){
 	int i;
 	selecionados = (Carro*) malloc(2 * sizeof(Carro));
-	selecionados = ordenar(carros, (sizeof(carros)/sizeof(Carro)));
+	selecionados = ordenarInsercao(carros, (sizeof(carros)/sizeof(Carro)));
 	
 
 	for(i = 0; i < (sizeof(carros)/sizeof(Carro)); i++){
@@ -66,6 +67,30 @@ Carro * ordenar(Carro * frota, int tamanhomax){
 				registrador = retorno[i];
 				retorno[i] = retorno[k];
 				retorno[k] = registrador;
+			}
+		}
+	}
+	return retorno;
+}
+
+Carro * ordenarInsercao (Carro * frota, int tamanhomax){
+	Carro * retorno = (Carro*) malloc(sizeof(Carro)*tamanhomax);
+	Carro registrador;
+	int i, k;
+	retorno = frota;
+	for(i = 0; i < tamanhomax-1; i++){
+		if(retorno[i].valor > retorno[i+1].valor){
+			registrador = retorno[i+1];
+			retorno[i+1] = retorno[i];
+			retorno[i] = registrador;
+			for(k = i; k > 0; k--){
+				if(retorno[k].valor < retorno[k-1].valor){
+					registrador = retorno[k-1];
+					retorno[k-1] = retorno[k];
+					retorno[k] = registrador;
+				}else{
+					break;
+				}
 			}
 		}
 	}
