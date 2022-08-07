@@ -85,6 +85,7 @@ Carro * ordenarInsercao (Carro * frota, int tamanhomax){
 			retorno[k+1] = retorno[k];
 			retorno[k] = registrador;
 			k--;
+			
 		}
 	}
 	return retorno;
