@@ -66,7 +66,7 @@ Carro * ordenar(Carro * frota, int tamanhomax){
 			if(frota[i].valor > frota[k].valor){
 				registrador = retorno[i];
 				retorno[i] = retorno[k];
-				retorno[k] = registrador;
+				retorno[k] = registrador;			
 			}
 		}
 	}
@@ -79,19 +79,12 @@ Carro * ordenarInsercao (Carro * frota, int tamanhomax){
 	int i, k;
 	retorno = frota;
 	for(i = 0; i < tamanhomax-1; i++){
-		if(retorno[i].valor > retorno[i+1].valor){
-			registrador = retorno[i+1];
-			retorno[i+1] = retorno[i];
-			retorno[i] = registrador;
-			for(k = i; k > 0; k--){
-				if(retorno[k].valor < retorno[k-1].valor){
-					registrador = retorno[k-1];
-					retorno[k-1] = retorno[k];
-					retorno[k] = registrador;
-				}else{
-					break;
-				}
-			}
+		k = i;
+		while(retorno[k].valor > retorno[k+1].valor){
+			registrador = retorno[k+1];
+			retorno[k+1] = retorno[k];
+			retorno[k] = registrador;
+			k--;
 		}
 	}
 	return retorno;
