@@ -80,12 +80,14 @@ Carro * ordenarInsercao (Carro * frota, int tamanhomax){
 	retorno = frota;
 	for(i = 0; i < tamanhomax-1; i++){
 		k = i;
-		while(k > 0 && retorno[k].valor > retorno[k+1].valor){
+		while(k >=0 && retorno[k].valor > retorno[k+1].valor){
 			registrador = retorno[k+1];
 			retorno[k+1] = retorno[k];
 			retorno[k] = registrador;
+			printf("%s trocou de lugar com %s\n", retorno[k].nome, retorno[k+1].nome);
 			k--;
 		}
+		printf("\n\n\n\n");
 	}
 	return retorno;
 }
