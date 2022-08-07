@@ -17,7 +17,7 @@ Carro * ordenarInsercao (Carro * frota, int tamanhomax);
 //=========================================
 
 //=======Variáveis globais=================
-Carro carros[] = {{"Lamborghini", 1000000.00}, {"Jeep", 45000.00}, {"Cacareco", 10000.00}, {"Brasília", 16000.00}, {"Smart", 46000.00}, {"Fusca", 17000.00}, {"Ferrari", 1200000.00}, {"Uno", 30000.00}};
+Carro carros[] = {{"Lamborghini", 1000000.00}, {"Jeep", 45000.00}, {"Cacareco", 10000.00}, {"Brasília", 16000.00}, {"Smart", 45000.00}, {"Fusca", 17000.00}, {"Ferrari", 1200000.00}, {"Uno", 30000.00}, {"Gol", 55000.00}};
 Carro barato;
 Carro * selecionados;
 //=========================================
@@ -80,12 +80,11 @@ Carro * ordenarInsercao (Carro * frota, int tamanhomax){
 	retorno = frota;
 	for(i = 0; i < tamanhomax-1; i++){
 		k = i;
-		while(retorno[k].valor > retorno[k+1].valor){
+		while(k > 0 && retorno[k].valor > retorno[k+1].valor){
 			registrador = retorno[k+1];
 			retorno[k+1] = retorno[k];
 			retorno[k] = registrador;
 			k--;
-			
 		}
 	}
 	return retorno;
