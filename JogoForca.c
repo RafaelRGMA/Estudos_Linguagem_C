@@ -11,7 +11,8 @@ void configuracaoInicial();
     char * definirCampo(char * escolhido);
 void abertura();
 void jogo();
-    void verificaJogada(char letra);
+    void verificaJogada(char * letra);
+        void validarInput(char * caractere);
     void avatar(int falhas);
     void fim();
 
@@ -19,11 +20,12 @@ void jogo();
 
 //======Variáveis globais=======================
 char palavras[][60] = {"PARALELEPIPEDO", "FAGOCITOSE", "ESTERNOCLEIDOMASTODIO", "ESCOPOLAMINA", "SONOPLASTIA"};
-char * campo, *palavra, letra;
+char * campo, * palavra, * letra;
 int erros;
 //==============================================
 
 int main(){
+    letra = (char*) malloc(sizeof(char));
     configuracaoInicial();
     abertura();
     jogo();
@@ -33,7 +35,8 @@ void jogo(){
     avatar(erros);
     printf("\n\n%s\n", campo);
     printf("\nDigite uma letra: ");    
-    scanf(" %c", &letra);
+    scanf(" %c", letra);
+    validarInput(letra);
     system("clear");
     verificaJogada(letra);//                1       0         
     (strcmp(campo, palavra) && erros < 6)?jogo():fim(erros);//strcmp(char) = 0 ->TRUE
@@ -67,17 +70,26 @@ void abertura(){
 }
 
 
-void verificaJogada(char letra){
+void verificaJogada(char *letra){
     int i;
     int acertou = 0;
-    letra = toupper(letra);
+    *letra = toupper(*letra);
     for (i = 0; palavra[i] != 0; i++){
-        if (letra == palavra[i]){
+        if (*letra == palavra[i]){
             campo[i] = palavra[i];
             acertou = 1;          
         }
     }
     (!acertou)?erros++:printf("\nLetra correta!\n\n");   
+}
+
+void validarInput(char * caractere){   ;
+    while(!(*caractere >= 65 && *caractere <= 90) && !(*caractere >= 97 && *caractere <= 122)){
+        printf("\nSão aceitos somente catacteres não especiais alfabéticos.\n");
+        printf("Digite a letra novamente: ");
+        scanf(" %c", caractere);        
+        printf("\n");
+    }
 }
 
 void fim(int falhas){
