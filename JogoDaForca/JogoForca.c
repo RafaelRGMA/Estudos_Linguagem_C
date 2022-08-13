@@ -10,7 +10,8 @@
 
 
 //======Variáveis globais=======================
-char palavras[][60] = {"PARALELEPIPEDO", "FAGOCITOSE", "ESTERNOCLEIDOMASTODIO", "ESCOPOLAMINA", "SONOPLASTIA"};
+//char palavras[][60] = {"PARALELEPIPEDO", "FAGOCITOSE", "ESTERNOCLEIDOMASTODIO", "ESCOPOLAMINA", "SONOPLASTIA"};
+FILE * palavras; 
 char * campo, * palavra, * letra;
 int erros;
 //==============================================
@@ -18,11 +19,12 @@ int erros;
 int main(){
     letra = (char*) malloc(sizeof(char));
     configuracaoInicial();
-    abertura();
     jogo();
     return 0;
 }
 void jogo(){
+    system("clear");
+    abertura();
     avatar(erros);
     printf("\n\n%s\n", campo);
     printf("\nDigite uma letra: ");    
@@ -32,23 +34,58 @@ void jogo(){
     verificaJogada(letra);//                1       0         
     (strcmp(campo, palavra) && erros < 6)?jogo():fim(erros);//strcmp(char) = 0 ->TRUE
 }
+
 void configuracaoInicial(){
-    srand(time(NULL));
+    //srand(time(NULL));
+    palavras = fopen("palavras.txt", "r+");
     palavra = (char*) malloc(60 * sizeof(char));
-    palavra = palavras[(rand() % 5)-1];
     campo = (char*) malloc(60 * sizeof(char));
+
+    palavra = sortearPalavra(palavras, 60);
+    //palavra = palavras[(rand() % 5)-1]; //----> Implementar escolha de palavras a partir do arquivo txt
     campo = definirCampo(palavra);
     erros = 0;
+    fclose(palavras);
+}
+
+char * sortearPalavra(FILE * palavras, int tamanhoLinha){
+	char * escolhido = (char *) malloc(sizeof(char) * tamanhoLinha);
+	int selecao, i;
+	srand(time(NULL));
+	selecao = rand()%tamanhoTxt(palavras, tamanhoLinha);
+	
+	for(i = 0; i <= selecao; i++){
+		fgets(escolhido, tamanhoLinha, palavras);
+	}
+	rewind(palavras);
+	return escolhido;
+}
+
+int tamanhoTxt(FILE * palavras, int tamanhoLinha){
+	int i = 0;
+	char linha[tamanhoLinha];
+	char linhaAnterior[tamanhoLinha];
+	while(strcmp(linha, linhaAnterior) != 0){	
+		strcpy(linhaAnterior, linha);
+		fgets(linha, tamanhoLinha, palavras);
+		if(strcmp(linha, linhaAnterior) == 0){
+			break;
+		}
+		i++;
+	}
+	rewind(palavras);
+	return i;
 }
 
 
 
 char * definirCampo(char * escolhido){
     int i;
-    char * retorno = (char*) malloc(60 * sizeof(char));
-    for(i = 0; escolhido[i]!= 0; i++){
+    char * retorno = (char*) malloc(sizeof(char) * 60);
+    for(i = 0; escolhido[i]!= 10; i++){
         retorno[i] = '_';
     }
+    retorno[i] = '\n';
     return retorno;
 }
 
@@ -76,6 +113,7 @@ void verificaJogada(char *letra){
 
 void validarInput(char * caractere){   ;
     while(!(*caractere >= 65 && *caractere <= 90) && !(*caractere >= 97 && *caractere <= 122)){
+        system("clear");
         printf("\nSão aceitos somente catacteres não especiais alfabéticos.\n");
         printf("Digite a letra novamente: ");
         scanf(" %c", caractere);        
@@ -85,9 +123,14 @@ void validarInput(char * caractere){   ;
 
 void fim(int falhas){
     if(falhas >= 6){
+        system("clear");
         avatar(falhas);
+        fimTragico();
         printf("\nVocê morreu!\n");
+        printf("\nA palavra correta é: %s\n", palavra);
     }else{
+        system("clear");
+        carinha();
         printf("\nParabéns! Você conseguiu sobreviver!\n");
     }
 }
@@ -108,4 +151,48 @@ void avatar(int falhas){
             (i == 7) ? printf("%c\n", enforcado[i]) : printf("%c ", enforcado[i]);
         }
     }
+}
+
+
+void carinha(){
+    printf("\n░░░░░░░░░▄▀▀▀░░░░░░░▀▄░░░░░░░\n");
+    printf("░░░░░░░▄▀░░░░░░░░░░░░▀▄░░░░░░\n");
+    printf("░░░░░░▄▀░░░░░░░░░░▄▀▀▄▀▄░░░░░\n");
+    printf("░░░░▄▀░░░░░░░░░░▄▀░░██▄▀▄░░░░\n");
+    printf("░░░▄▀░░▄▀▀▀▄░░░░█░░░▀▀░█▀▄░░░\n");
+    printf("░░░█░░█▄▄░░░█░░░▀▄░░░░░▐░█░░░\n");
+    printf("░░▐▌░░█▀▀░░▄▀░░░░░▀▄▄▄▄▀░░█░░\n");
+    printf("░░▐▌░░█░░░▄▀░░░░░░░░░░░░░░█░░\n");
+    printf("░░▐▌░░░▀▀▀░░░░░░░░░░░░░░░░▐▌░\n");
+    printf("░░▐▌░░░░░░░░░░░░░░░▄░░░░░░▐▌░\n");
+    printf("░░▐▌░░░░░░░░░▄░░░░░█░░░░░░▐▌░\n");
+    printf("░░░█░░░░░░░░░▀█▄░░▄█░░░░░░▐▌░\n");
+    printf("░░░▐▌░░░░░░░░░░▀▀▀▀░░░░░░░▐▌░\n");
+    printf("░░░░█░░░░░░░░░░░░░░░░░░░░░█░░\n");
+    printf("░░░░▐▌▀▄░░░░░░░░░░░░░░░░░▐▌░░\n");
+    printf("░░░░░█░░▀░░░░░░░░░░░░░░░░▀░░░\n");
+
+
+}
+
+void fimTragico(){
+    printf("\n\n███████████████████████████\n");
+    printf("███████▀▀▀░░░░░░░▀▀▀███████\n");
+    printf("████▀░░░░░░░░░░░░░░░░░▀████\n");
+    printf("███│░░░░░░░░░░░░░░░░░░░│███\n");
+    printf("██▌│░░░░░░░░░░░░░░░░░░░│▐██\n");
+    printf("██░└┐░░░░░░░░░░░░░░░░░┌┘░██\n");
+    printf("██░░└┐░░░░░░░░░░░░░░░┌┘░░██\n");
+    printf("██░░┌┘▄▄▄▄▄░░░░░▄▄▄▄▄└┐░░██\n");
+    printf("██▌░│██████▌░░░▐██████│░▐██\n");
+    printf("███░│▐███▀▀░░▄░░▀▀███▌│░███\n");
+    printf("██▀─┘░░░░░░░▐█▌░░░░░░░└─▀██\n");
+    printf("██▄░░░▄▄▄▓░░▀█▀░░▓▄▄▄░░░▄██\n");
+    printf("████▄─┘██▌░░░░░░░▐██└─▄████\n");
+    printf("█████░░▐█─┬┬┬┬┬┬┬─█▌░░█████\n");
+    printf("████▌░░░▀┬┼┼┼┼┼┼┼┬▀░░░▐████\n");
+    printf("█████▄░░░└┴┴┴┴┴┴┴┘░░░▄█████\n");
+    printf("███████▄░░░░░░░░░░░▄███████\n");
+    printf("██████████▄▄▄▄▄▄▄██████████\n");
+    printf("███████████████████████████\n");
 }

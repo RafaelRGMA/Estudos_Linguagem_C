@@ -19,9 +19,10 @@ int main(){
     resultado = (char *) malloc(sizeof(char)*60);	    
     palavras = fopen("palavras.txt", "r+");
 
-
-	resultado = sortearPalavra(palavras, 60);
-	printf("\nPalavra selecionada: %s\n", resultado);
+	fgets(resultado, 60, palavras);
+	//resultado = sortearPalavra(palavras, 60);
+	printf("\nO que vem depois da ultima letra: %i\n", resultado[22]);
+	(resultado[22] == 10)?printf("\nÉ isso mesmo\n"):printf("\nNão é a mesma coisa\n");
 
     fclose(palavras);
     return 0;
