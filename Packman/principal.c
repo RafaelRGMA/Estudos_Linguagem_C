@@ -7,12 +7,20 @@ typedef struct{
     char avatar;
     int x;
     int y;
+    char visaoParaCima;
+    char visaoParaBaixo;
+    char visaoParaEsquerda;
+    char visaoParaDireita;
 }Personagem;
 
 typedef struct{
     char avatar;
     int x;
     int y;
+    char visaoParaCima;
+    char visaoParaBaixo;
+    char visaoParaEsquerda;
+    char visaoParaDireita;
 }Fantasma;
 
 
@@ -86,9 +94,10 @@ void movimento(){
         scanf(" %c", &comando);
         system("clear");
         setbuf(stdin, NULL);
+        localizarPackman();
         switch(comando){
-            case 119: //Seta para cima
-                if(matrizMapa[packman.y-1][packman.x] == '*'){                
+            case 119: //Seta para cima (tecla w + enter)
+                if(packman.visaoParaCima == '*'){                
                     matrizMapa[packman.y][packman.x] = '*';            
                     packman.y--;
                     matrizMapa[packman.y][packman.x] = packman.avatar;
@@ -96,24 +105,24 @@ void movimento(){
                 break;                
                 
                               
-            case 97: //Seta para esquerda
-                if(matrizMapa[packman.y][packman.x-1] == '*'){                    
+            case 97: //Seta para esquerda (tecla a + enter)
+                if(packman.visaoParaEsquerda == '*'){                    
                     matrizMapa[packman.y][packman.x] = '*';             
                     packman.x--;
                     matrizMapa[packman.y][packman.x] = packman.avatar;
                 }
                 break;
 
-            case 115: //Seta para baixo
-                if(matrizMapa[packman.y+1][packman.x] == '*'){                    
+            case 115: //Seta para baixo (tecla s + enter)
+                if(packman.visaoParaBaixo == '*'){                    
                     matrizMapa[packman.y][packman.x] = '*';             
                     packman.y++;
                     matrizMapa[packman.y][packman.x] = packman.avatar;
                 }
                 break;
 
-            case 100: //Seta para direita
-                if(matrizMapa[packman.y][packman.x+1] == '*'){                    
+            case 100: //Seta para direita (tecla d + enter)
+                if(packman.visaoParaDireita == '*'){                    
                     matrizMapa[packman.y][packman.x] = '*';             
                     packman.x++;
                     matrizMapa[packman.y][packman.x] = packman.avatar;
@@ -126,22 +135,23 @@ void movimento(){
 
 }
 
-void moverFantasma(){
-    if((fantasma.x - packman.x) > 0){
+void moverFantasma(){ //Falta implementar visão na diagonal
+    localizarFantasma();
+    if(((fantasma.x - packman.x) > 0) && (fantasma.visaoParaEsquerda == '*')){
         matrizMapa[fantasma.y][fantasma.x] = '*';
         fantasma.x--;
         matrizMapa[fantasma.y][fantasma.x] = fantasma.avatar;
-    }else if(fantasma.x - packman.x < 0){
+    }else if((fantasma.x - packman.x < 0) && (fantasma.visaoParaDireita == '*')){
         matrizMapa[fantasma.y][fantasma.x] = '*';
         fantasma.x++;
         matrizMapa[fantasma.y][fantasma.x] = fantasma.avatar;
     }
 
-    if((fantasma.y - packman.y) > 0){
+    if((fantasma.y - packman.y > 0) && (fantasma.visaoParaCima == '*')){
         matrizMapa[fantasma.y][fantasma.x] = '*';
         fantasma.y--;
         matrizMapa[fantasma.y][fantasma.x] = fantasma.avatar;
-    }else if(fantasma.y - packman.y < 0){
+    }else if((fantasma.y - packman.y < 0) && (fantasma.visaoParaBaixo == '*')){
         matrizMapa[fantasma.y][fantasma.x] = '*';
         fantasma.y++;
         matrizMapa[fantasma.y][fantasma.x] = fantasma.avatar;
@@ -165,7 +175,10 @@ void localizarPackman(){
             }
         }
     }
-
+    packman.visaoParaCima = matrizMapa[packman.y-1][packman.x];
+    packman.visaoParaBaixo = matrizMapa[packman.y+1][packman.x];
+    packman.visaoParaEsquerda = matrizMapa[packman.y][packman.x-1];
+    packman.visaoParaDireita = matrizMapa[packman.y][packman.x+1];
 }
 
 void localizarFantasma(){
@@ -178,5 +191,9 @@ void localizarFantasma(){
             }
         }
     }
+    fantasma.visaoParaCima = matrizMapa[fantasma.y-1][fantasma.x];
+    fantasma.visaoParaBaixo = matrizMapa[fantasma.y+1][fantasma.x];
+    fantasma.visaoParaEsquerda = matrizMapa[fantasma.y][fantasma.x-1];
+    fantasma.visaoParaDireita = matrizMapa[fantasma.y][fantasma.x+1];
 
 }
